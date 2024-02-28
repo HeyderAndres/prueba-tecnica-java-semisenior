@@ -23,7 +23,7 @@ public class C {
             List<Long> totales = new ArrayList<>();
 
             for (int i = 0; i < cantidadValores; i++) {
-                System.out.println("Digite la cantidad delproducto ");
+                System.out.println("Digite la cantidad del producto ");
                 int cantidad = input.nextInt();
                 System.out.println("Digite el precio del producto ");
                 long precio = input.nextLong();
