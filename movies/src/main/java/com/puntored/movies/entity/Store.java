@@ -14,15 +14,9 @@ import jakarta.persistence.Id;
  * @author heiderarellano
  */
 @Entity
-public class Film {
+public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long film_id;
-    private String title;
-    private String description;
-    private String year;
-    private long rentalDuration;
-    private long rating;
-    private long duration;
-    private long rental_price;
+    private long store_id;
+    private String address;
 }
