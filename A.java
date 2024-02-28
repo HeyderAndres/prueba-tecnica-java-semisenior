@@ -16,6 +16,7 @@ try (Scanner input = new Scanner(System.in)) {
             String coordenadasSubmarinoUno = input.nextLine();
 
             String[] valuesSubmarinoUno = coordenadasSubmarinoUno.split(" ");
+            validarDatosIngresado(valuesSubmarinoUno);
             Float x = Float.valueOf(valuesSubmarinoUno[0]);
             Float y = Float.valueOf(valuesSubmarinoUno[1]);
             Integer z = Integer.valueOf(valuesSubmarinoUno[2]);
@@ -24,7 +25,9 @@ try (Scanner input = new Scanner(System.in)) {
             
             System.out.println("Por favor ingrese las coordenadas (x,y,z) del submarino numero 1 separadas por 1 espacio");
             String coordenadasSubmarinoDos = input.nextLine();
+            
             String[] valuesSubmarinoDos = coordenadasSubmarinoDos.split(" ");
+            validarDatosIngresado(valuesSubmarinoDos);
             Float x2 = Float.valueOf(valuesSubmarinoDos[0]);
             Float y2 = Float.valueOf(valuesSubmarinoDos[1]);
             Integer z2 = Integer.valueOf(valuesSubmarinoDos[2]);
@@ -54,6 +57,12 @@ try (Scanner input = new Scanner(System.in)) {
 
         if (z < 0 || z > 10000) {
             throw new InputMismatchException("El valor de z esta fuera de los limites permitidos");
+        }
+    }
+    
+    private static void validarDatosIngresado(String[] input){
+        if (input.length != 3) {
+            throw new InputMismatchException("debe ingresar los 3 puntos separadas por espacio");
         }
     }
 
