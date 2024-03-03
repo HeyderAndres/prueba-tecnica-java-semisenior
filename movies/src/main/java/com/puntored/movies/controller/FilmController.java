@@ -4,9 +4,22 @@
  */
 package com.puntored.movies.controller;
 
+import com.puntored.movies.dto.ApiResponseDTO;
+import com.puntored.movies.dto.CategoryRequestDTO;
+import com.puntored.movies.dto.FilmRequestDTO;
+import com.puntored.movies.dto.MoviesStoreDTO;
+import com.puntored.movies.entity.Category;
+import com.puntored.movies.entity.Film;
+import com.puntored.movies.service.FilmService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,36 +29,69 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 /**
- *
  * @author heiderarellano
  */
 @RestController
-@RequestMapping("/url")
+@RequestMapping("/film")
 public class FilmController {
-    
+
+    @Autowired
+    private FilmService filmService;
+
     @GetMapping()
-    public List<Object> list() {
-        return null;
+    public ApiResponseDTO<List<Film>> findAll() {
+        return filmService.findAll();
+
     }
-    
+
     @GetMapping("/{id}")
-    public Object get(@PathVariable String id) {
-        return null;
+    public ApiResponseDTO<Film> finById(@PathVariable long id) {
+        return filmService.findById(id);
     }
-    
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> put(@PathVariable String id, @RequestBody Object input) {
-        return null;
+    public ResponseEntity<ApiResponseDTO<Film>> update(
+            @Valid @RequestBody FilmRequestDTO request, BindingResult result, @PathVariable long id) {
+        ApiResponseDTO<Film> response = new ApiResponseDTO<>();
+
+        if (result.hasErrors()) {
+            response.setFailRequestParams();
+            System.out.println(result.getAllErrors());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        response = filmService.update(id, request);
+        if (!response.getCode().equals("200")) {
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     @PostMapping
-    public ResponseEntity<?> post(@RequestBody Object input) {
-        return null;
+    public ResponseEntity<ApiResponseDTO<Film>> create(@Valid @RequestBody FilmRequestDTO request, BindingResult result) {
+        ApiResponseDTO<Film> response = new ApiResponseDTO<>();
+        if (result.hasErrors()) {
+            response.setFailRequestParams();
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        response = filmService.create(request);
+        if (!response.getCode().equals("200")) {
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id) {
-        return null;
+    public ResponseEntity<ApiResponseDTO<Film>> delete(@PathVariable long id) {
+        ApiResponseDTO<Film> response = filmService.delete(id);
+        if (!response.getCode().equals("200")) {
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
+    @GetMapping("/stores/{id}")
+    public ApiResponseDTO<List<MoviesStoreDTO>> findStoresAndQuantityByFilmId(@PathVariable long id){
+        return filmService.findStoresAndQuantityByFilmId(id);
+    }
+
 }

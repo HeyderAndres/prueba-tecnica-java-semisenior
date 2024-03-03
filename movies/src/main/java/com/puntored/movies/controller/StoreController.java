@@ -4,6 +4,14 @@
  */
 package com.puntored.movies.controller;
 
+import com.puntored.movies.dto.ApiResponseDTO;
+import com.puntored.movies.dto.StoreRequestDTO;
+import com.puntored.movies.entity.Store;
+import com.puntored.movies.service.StoreService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
@@ -20,32 +28,61 @@ import org.springframework.web.bind.annotation.PutMapping;
  * @author heiderarellano
  */
 @RestController
-@RequestMapping("/url")
+@RequestMapping("/store")
 public class StoreController {
-    
+
+    @Autowired
+    private StoreService storeService;
+
     @GetMapping()
-    public List<Object> list() {
-        return null;
+    public ApiResponseDTO<List<Store>> findAll() {
+        return storeService.findAll();
+
     }
-    
+
     @GetMapping("/{id}")
-    public Object get(@PathVariable String id) {
-        return null;
+    public ApiResponseDTO<Store> finById(@PathVariable long id) {
+        return storeService.findById(id);
     }
-    
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> put(@PathVariable String id, @RequestBody Object input) {
-        return null;
+    public ResponseEntity<ApiResponseDTO<Store>> update(
+            @Valid @RequestBody StoreRequestDTO request, BindingResult result, @PathVariable long id) {
+        ApiResponseDTO<Store> response = new ApiResponseDTO<>();
+
+        if (result.hasErrors()){
+            response.setFailRequestParams();
+            System.out.println(result.getAllErrors());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        response = storeService.update(id,request);
+        if (!response.getCode().equals("200")) {
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     @PostMapping
-    public ResponseEntity<?> post(@RequestBody Object input) {
-        return null;
+    public ResponseEntity<ApiResponseDTO<Store>> create(@Valid @RequestBody StoreRequestDTO request, BindingResult result) {
+        ApiResponseDTO<Store> response = new ApiResponseDTO<>();
+        if (result.hasErrors()){
+            response.setFailRequestParams();
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        response = storeService.create(request);
+        if (!response.getCode().equals("200")) {
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id) {
-        return null;
+    public ResponseEntity<ApiResponseDTO<Store>> delete(@PathVariable long id) {
+        ApiResponseDTO<Store> response = storeService.delete(id);
+        if (!response.getCode().equals("200")){
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
 }
