@@ -10,29 +10,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  *
  * @author heiderarellano
  */
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "film")
 public class Film {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id")
     private long filmId;
     private String title;
     private String description;
-    private String year;
+    @Column(name = "year_movie")
+    private String yearMovie;
     @Column(name = "rental_duration")
-    private long rentalDuration;
-    private long rating;
-    private long duration;
+    private Float rentalDuration;
+    private Float rating;
+    private Float duration;
     @Column(name = "rental_price")
-    private long rentalPPrice;
+    private Float rentalPrice;
 }

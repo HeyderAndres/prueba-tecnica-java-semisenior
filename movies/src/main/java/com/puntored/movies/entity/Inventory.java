@@ -12,20 +12,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  *
  * @author heiderarellano
  */
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "inventory")
 public class Inventory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id")
     private long inventoryId;
     @ManyToOne

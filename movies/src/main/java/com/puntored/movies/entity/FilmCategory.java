@@ -10,29 +10,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ManyToAny;
+import lombok.Data;
 
 /**
  *
  * @author heiderarellano
  */
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "film_category")
 public class FilmCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "filmcategory_id")
     private long filmcaterogyId;
-    @ManyToAny
+
+    @ManyToOne
     @JoinColumn(name = "film_id")
     private Film film;
     
-    @ManyToAny
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 }
