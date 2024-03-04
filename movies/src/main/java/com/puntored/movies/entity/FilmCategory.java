@@ -4,6 +4,7 @@
  */
 package com.puntored.movies.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,17 +21,19 @@ import lombok.Data;
  */
 @Entity
 @Data
+@Schema(name = "FilmCategory", description = "Relación entre una película y su género")
 @Table(name = "film_category")
 public class FilmCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador de la relación", example = "1")
     @Column(name = "filmcategory_id")
     private long filmcaterogyId;
 
     @ManyToOne
     @JoinColumn(name = "film_id")
     private Film film;
-    
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

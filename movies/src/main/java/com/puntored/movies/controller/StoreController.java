@@ -8,6 +8,8 @@ import com.puntored.movies.dto.ApiResponseDTO;
 import com.puntored.movies.dto.StoreRequestDTO;
 import com.puntored.movies.entity.Store;
 import com.puntored.movies.service.StoreService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,23 +31,32 @@ import org.springframework.web.bind.annotation.PutMapping;
  */
 @RestController
 @RequestMapping("/store")
+@Tag(name = "Tienda",
+        description = "Endpoints para realizar CRUD de tiendas de película")
 public class StoreController {
 
     @Autowired
     private StoreService storeService;
 
     @GetMapping()
+    @Operation(summary = "Buscar tiendas",
+            description = "Retorna los tiendas disponibles")
     public ApiResponseDTO<List<Store>> findAll() {
         return storeService.findAll();
 
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar tienda por id",
+            description = "Retorna el tienda que tenga el id suministrado")
     public ApiResponseDTO<Store> finById(@PathVariable long id) {
         return storeService.findById(id);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar tienda",
+            description = "Recibe un id y un Objeto StoreRequestDTO" +
+                    " para actualizar y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Store>> update(
             @Valid @RequestBody StoreRequestDTO request, BindingResult result, @PathVariable long id) {
         ApiResponseDTO<Store> response = new ApiResponseDTO<>();
@@ -63,6 +74,9 @@ public class StoreController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear tienda",
+            description = "Recibe un Objeto StoreyRequestDTO" +
+                    " para crear y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Store>> create(@Valid @RequestBody StoreRequestDTO request, BindingResult result) {
         ApiResponseDTO<Store> response = new ApiResponseDTO<>();
         if (result.hasErrors()){
@@ -77,6 +91,9 @@ public class StoreController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar Tienda",
+            description = "Recibe un id de tienda," +
+                    " devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Store>> delete(@PathVariable long id) {
         ApiResponseDTO<Store> response = storeService.delete(id);
         if (!response.getCode().equals("200")){

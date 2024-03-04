@@ -80,13 +80,14 @@ public class CategoryService {
             newCategory.setName(request.getName());
             newCategory.setDescription(request.getDescription());
             Category category = categoryRepository.save(newCategory);
+            System.out.println(category);
 
             if (categoryRepository.findById(category.getCategoryId()).isEmpty()){
                 response.setDeclinedTrasaction(category);
                 return response;
             }
 
-            response.setSuccesQuery(newCategory);
+            response.setSuccesQuery(category);
 
         } catch (Exception e) {
             response.setFailService();

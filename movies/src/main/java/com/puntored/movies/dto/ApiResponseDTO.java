@@ -4,6 +4,7 @@
  */
 package com.puntored.movies.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,10 +14,18 @@ import java.io.Serializable;
  * @author heiderarellano
  */
 @Data
+@Schema(name = "ApiResponseDTO", description = "Respuesta Genérica de los servicios")
 public class ApiResponseDTO<T> implements Serializable {
+    @Schema(description = "Estado de la petición, true para exitosa y false para fallida")
     private boolean state = false;
+
+    @Schema(description = "Mensaje de respuesta de la petición")
     private String message = null;
+
+    @Schema(description = "Código de respuesta de la petición, Exitosa 0")
     private String code = null;
+
+    @Schema(description = "Objeto que contiene los datos de respuesta de la petición")
     private T data = null;
 
     public void setSuccesTrasaction(T data) {

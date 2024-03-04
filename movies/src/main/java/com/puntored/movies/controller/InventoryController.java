@@ -10,6 +10,8 @@ import com.puntored.movies.dto.InventoryRequestDTO;
 import com.puntored.movies.entity.Category;
 import com.puntored.movies.entity.Inventory;
 import com.puntored.movies.service.InventoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,23 +33,32 @@ import org.springframework.web.bind.annotation.PutMapping;
  */
 @RestController
 @RequestMapping("/inventory")
+@Tag(name = "Inventario",
+        description = "Endpoints para realizar CRUD de inventario de película")
 public class InventoryController {
 
     @Autowired
     private InventoryService inventoryService;
 
     @GetMapping()
+    @Operation(summary = "Buscar inventario",
+            description = "Retorna los inventario disponibles")
     public ApiResponseDTO<List<Inventory>> findAll() {
         return inventoryService.findAll();
 
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar Inventario por id",
+            description = "Retorna el inventario que tenga el id suministrado")
     public ApiResponseDTO<Inventory> finById(@PathVariable long id) {
         return inventoryService.findById(id);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar inventario",
+            description = "Recibe un id y un Objeto InventoryRequestDTO" +
+                    " para actualizar y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Inventory>> update(
             @Valid @RequestBody InventoryRequestDTO request, BindingResult result, @PathVariable long id) {
         ApiResponseDTO<Inventory> response = new ApiResponseDTO<>();
@@ -65,6 +76,9 @@ public class InventoryController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear Inventario",
+            description = "Recibe un Objeto InventoryRequestDTO" +
+                    " para crear y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Inventory>> create(@Valid @RequestBody InventoryRequestDTO request, BindingResult result) {
         ApiResponseDTO<Inventory> response = new ApiResponseDTO<>();
         if (result.hasErrors()){
@@ -79,6 +93,9 @@ public class InventoryController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar inventario",
+            description = "Recibe un id de inventario," +
+                    " devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Inventory>> delete(@PathVariable long id) {
         ApiResponseDTO<Inventory> response = inventoryService.delete(id);
         if (!response.getCode().equals("200")){

@@ -10,6 +10,8 @@ import com.puntored.movies.dto.InventoryRequestDTO;
 import com.puntored.movies.entity.FilmCategory;
 import com.puntored.movies.entity.Inventory;
 import com.puntored.movies.service.FilmCategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,10 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- *
  * @author heiderarellano
  */
 @RestController
+@Tag(name = "Peliculas - Categoría",
+        description = "Endpoints para realizar CRUD de la relación entre peliculas y sus géneros")
 @RequestMapping("/filmcategory")
 public class FilmCategoryController {
 
@@ -38,27 +41,33 @@ public class FilmCategoryController {
     private FilmCategoryService filmCategoryService;
 
     @GetMapping()
+    @Operation(summary = "Buscar relaciones Pelicula - Categoría",
+            description = "Retorna las realaciones entre peliculas y categorías disponibles")
     public ApiResponseDTO<List<FilmCategory>> findAll() {
         return filmCategoryService.findAll();
 
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar Categoría por id", description = "Retorna una categoría que tenga el id suministrado")
     public ApiResponseDTO<FilmCategory> finById(@PathVariable long id) {
         return filmCategoryService.findById(id);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar Relación película - categoría",
+            description = "Recibe un id de relación y un Objeto FilmCategoryRequestDTO" +
+                    " para actualizar y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<FilmCategory>> update(
             @Valid @RequestBody FilmCategoryRequestDTO request, BindingResult result, @PathVariable long id) {
         ApiResponseDTO<FilmCategory> response = new ApiResponseDTO<>();
 
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             response.setFailRequestParams();
             System.out.println(result.getAllErrors());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        response = filmCategoryService.update(id,request);
+        response = filmCategoryService.update(id, request);
         if (!response.getCode().equals("200")) {
             return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
         }
@@ -66,9 +75,12 @@ public class FilmCategoryController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear Relación película - categoría",
+            description = "Recibe un Objeto FilmCategoryRequestDTO" +
+                    " para acrar y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<FilmCategory>> create(@Valid @RequestBody FilmCategoryRequestDTO request, BindingResult result) {
         ApiResponseDTO<FilmCategory> response = new ApiResponseDTO<>();
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             response.setFailRequestParams();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -80,9 +92,12 @@ public class FilmCategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar Relación película - categoría",
+            description = "Recibe un id de una Relación película - categoría," +
+                    " devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<FilmCategory>> delete(@PathVariable long id) {
         ApiResponseDTO<FilmCategory> response = filmCategoryService.delete(id);
-        if (!response.getCode().equals("200")){
+        if (!response.getCode().equals("200")) {
             return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);

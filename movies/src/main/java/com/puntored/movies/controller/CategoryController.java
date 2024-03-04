@@ -8,6 +8,8 @@ import com.puntored.movies.dto.ApiResponseDTO;
 import com.puntored.movies.entity.Category;
 import com.puntored.movies.dto.CategoryRequestDTO;
 import com.puntored.movies.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,24 +31,34 @@ import org.springframework.web.bind.annotation.PutMapping;
  * @author heiderarellano
  */
 @RestController
+@Tag(name = "Categorias",
+        description = "Endpoints para realizar CRUD de categorías de película")
 @RequestMapping("/category")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-    
+
+
     @GetMapping()
+    @Operation(summary = "Buscar Categorías",
+            description = "Retorna las categorías disponibles")
     public ApiResponseDTO<List<Category>> findAll() {
         return categoryService.findAll();
 
     }
-    
+
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar Categoría por id",
+            description = "Retorna una categoría que tenga el id suministrado")
     public ApiResponseDTO<Category> finById(@PathVariable long id) {
         return categoryService.findById(id);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar categoría",
+            description = "Recibe un id y un Objeto CategoryRequestDTO" +
+            " para actualizar y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Category>> update(
        @Valid @RequestBody CategoryRequestDTO request, BindingResult result,@PathVariable long id) {
         ApiResponseDTO<Category> response = new ApiResponseDTO<>();
@@ -64,6 +76,9 @@ public class CategoryController {
     }
     
     @PostMapping
+    @Operation(summary = "Crear categoría",
+            description = "Recibe un Objeto CategoryRequestDTO" +
+            " para crear y devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Category>> create(@Valid @RequestBody CategoryRequestDTO request, BindingResult result) {
         ApiResponseDTO<Category> response = new ApiResponseDTO<>();
         if (result.hasErrors()){
@@ -78,6 +93,9 @@ public class CategoryController {
     }
     
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar categoría",
+            description = "Recibe un id de una categoría," +
+            " devuelve un Objeto ApiResponseDTO")
     public ResponseEntity<ApiResponseDTO<Category>> delete(@PathVariable long id) {
         ApiResponseDTO<Category> response = categoryService.delete(id);
         if (!response.getCode().equals("200")){

@@ -4,6 +4,7 @@
  */
 package com.puntored.movies.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,11 +19,15 @@ import lombok.Data;
  */
 @Entity
 @Data
+@Schema(name = "Store", description = "Tienda de Películas")
 @Table(name = "store")
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador único de la tienda")
     @Column(name = "store_id")
     private long storeId;
+
+    @Schema(description = "Dirección de la tienda")
     private String address;
 }
