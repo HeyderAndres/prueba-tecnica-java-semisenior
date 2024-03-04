@@ -23,7 +23,7 @@ try (Scanner input = new Scanner(System.in)) {
 
             validarValores(x, y, z);
             
-            System.out.println("Por favor ingrese las coordenadas (x,y,z) del submarino numero 1 separadas por 1 espacio");
+            System.out.println("Por favor ingrese las coordenadas (x,y,z) del submarino numero 2 separadas por 1 espacio");
             String coordenadasSubmarinoDos = input.nextLine();
             
             String[] valuesSubmarinoDos = coordenadasSubmarinoDos.split(" ");
@@ -52,7 +52,7 @@ try (Scanner input = new Scanner(System.in)) {
         }
 
         if (y < -100000 || y > 100000) {
-            throw new InputMismatchException("El valor de x esta fuera de los limites permitidos");
+            throw new InputMismatchException("El valor de y esta fuera de los limites permitidos");
         }
 
         if (z < 0 || z > 10000) {
